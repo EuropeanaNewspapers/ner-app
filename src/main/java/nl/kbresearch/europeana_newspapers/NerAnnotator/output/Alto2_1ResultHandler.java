@@ -174,7 +174,7 @@ public class Alto2_1ResultHandler implements ResultHandler {
         Element alto_root = (Element) alto.item(0);
         alto_root.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
         alto_root.setAttribute("xmlns" , "http://www.loc.gov/standards/alto/ns-v2#");
-        alto_root.setAttribute("xsi:schemaLocation", "http://www.loc.gov/standards/alto/ns-v2# https://raw.github.com/altoxml/schema/master/v2/alto-2-1-draft.xsd");
+        alto_root.setAttribute("xsi:schemaLocation", "http://www.loc.gov/standards/alto/ns-v2# http://www.loc.gov/standards/alto/alto.xsd");
 
         try {
             // Output file for alto2_1 format.
