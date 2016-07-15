@@ -3,15 +3,11 @@ Named Entity Recognition Tool for <br>[Europeana Newspapers](http://www.european
 
 This tool takes container documents ([MPEG21-DIDL](http://xml.coverpages.org/mpeg21-didl.html), [METS](http://www.loc.gov/standards/mets/)),
 parses all references to [ALTO](http://www.loc.gov/standards/alto/) files and tries to find named entities in the pages
-(with most models: Location, Person, Organisation, Misc). The aim is to keep the physical location on the page available through the whole process
-to be able to highlight the results in a viewer.
+(with most models: Location, Person, Organisation, Misc). The aim is to keep the physical location on the page available through the whole process to be able to highlight the results in a viewer.
 
 Read more about it on the KBNLresearch [blog](http://researchkb.wordpress.com/2014/03/03/ner-newspapers/).
 
-[Stanford NER](http://www-nlp.stanford.edu/software/CRF-NER.shtml) is used for tagging. The goal during development was to use 'loose coupling',
-this enables us to quickly inherit/benefit from upstream development. Most of the development is done at the research department of the KB,
-[national library of the Netherlands](http://kb.nl/en/research). If you are looking for a project which does more interaction with the core of
-Stanford-NER, take a peek at the project from our colleagues INL,
+[Stanford NER](http://www-nlp.stanford.edu/software/CRF-NER.shtml) is used for tagging. The goal during development was to use 'loose coupling', this enables us to quickly inherit/benefit from upstream development. Most of the development is done at the research department of the KB, [National library of the Netherlands](http://kb.nl/en/research). If you are looking for a project which does more interaction with the core of Stanford-NER, take a peek at the project from our colleagues INL,
 [Institute for Dutch Lexicology](http://www.inl.nl/our-work-and-working-methods) [INL-NERT](https://github.com/INL/NERT),
 although they are separate branches now, there is a desire to integrate both in the future.
 
@@ -19,9 +15,9 @@ although they are separate branches now, there is a desire to integrate both in 
 
 The following input formats are implemented:
 
-* ALTO 1.0
+* ALTO 1.0/2.1
 * HTML
-* Mets
+* METS
 * MPEG21 DIDL
 * Text
 
@@ -29,7 +25,7 @@ The following input formats are implemented:
 
 The following output formats are implemented:
 
-* ALTO [2.1 (soon to be replaced with 3.0)](http://www.loc.gov/standards/alto/v3/alto-3-0.xsd)
+* ALTO (2.1 and [3.0 with tags](http://altoxml.github.io/documentation/use-cases/tags/ALTO_tags_usecases.html#named_entity_tagging))
 * ALTO-with-Alternatives (aka. inline ALTO)
 * BIO
 * CSV
@@ -40,7 +36,7 @@ The following output formats are implemented:
 
 Building from source:
 
-Install Maven, Java (v1.7 and up). Clone the source from github, and in the toplevel directory run:
+Install Maven, Java (v1.7 and up). Clone the source from GitHub, and in the toplevel directory run:
 
     mvn package
 
@@ -83,11 +79,11 @@ Example invocation for classification of german_alto.xml:
     java -Xmx800m -jar NerAnnotator.jar -c mets -f alto -l de -m de=./test-files/german.ser.gz -n 2 ./test-files/german_alto.xml
 
 The given example takes the language model called 'german.ser.gz' and
-applies it to 'german_alo.xml' using 2 threads, and container type METS.
+applies it to 'german_alto.xml' using 2 threads, and container type METS.
 
 ## Usage web-interface
 
-Webinterface standalone:
+Web-interface standalone:
 
     mvn jetty:run
 
@@ -97,7 +93,7 @@ Once deployed to Tomcat the following applies. The default configuration (as wel
 reside in `src/main/resources/config.ini`, this file references the available classifiers.
 
 See the provided sample for some default settings. The landing page of the application
-will show the available options once invoked with the browser.  The config.ini and the
+will show the available options once invoked with the browser. The config.ini and the
 classifiers will end up in `WEB-INF/classes/`, after deployment.
 
 ### Working with classifiers and binary model generation
