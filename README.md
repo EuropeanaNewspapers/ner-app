@@ -2,23 +2,23 @@ Named Entity Recognition Tool for <br>[Europeana Newspapers](http://www.european
 ------------------------------------------------------
 
 This tool takes container documents ([MPEG21-DIDL](http://xml.coverpages.org/mpeg21-didl.html), [METS](http://www.loc.gov/standards/mets/)),
-parses all references to [ALTO](http://www.loc.gov/standards/alto/) files and tries to find named entities in the pages
-(with most models: Location, Person, Organisation, Misc). The aim is to keep the physical location on the page available through the whole process to be able to highlight the results in a viewer.
+parses all references to [ALTO](http://www.loc.gov/standards/alto/) files and tries to find named entities in the text
+(with most models: Location, Person, Organisation, Misc). The aim is to keep the physical location (aka coordinates) on the page available throughout the whole process to be able to highlight the results in a viewer.
 
 Read more about it on the KBNLresearch [blog](http://researchkb.wordpress.com/2014/03/03/ner-newspapers/).
 
-[Stanford NER](http://www-nlp.stanford.edu/software/CRF-NER.shtml) is used for tagging. The goal during development was to use 'loose coupling', this enables us to quickly inherit/benefit from upstream development. Most of the development is done at the research department of the KB, [National library of the Netherlands](http://kb.nl/en/research). If you are looking for a project which does more interaction with the core of Stanford-NER, take a peek at the project from our colleagues INL,
-[Institute for Dutch Lexicology](http://www.inl.nl/our-work-and-working-methods) [INL-NERT](https://github.com/INL/NERT),
-although they are separate branches now, there is a desire to integrate both in the future.
+[Stanford-NER](http://www-nlp.stanford.edu/software/CRF-NER.shtml) is used for tagging. Most of the development was done at the research department of the [National Library of the Netherlands](http://kb.nl/en/research) over the course of the [Europeana Newspapers](http://www.europeana-newspapers.eu/) project (2012-2015). Maintenance of this project has since been taken over by the [Berlin State Library](http://staatsbibliothek-berlin.de/).
+
+If you are looking for a project which interacts more closely with the core of Stanford-NER, take a peek at the [INL branch](https://github.com/EuropeanaNewspapers/ner-app/tree/inl), created by the [Institute for Dutch Lexicology](http://www.inl.nl/our-work-and-working-methods).
 
 ## Input formats
 
 The following input formats are implemented:
 
-* ALTO 1.0/2.1
+* ALTO
 * HTML
 * METS
-* MPEG21 DIDL
+* MPEG21-DIDL
 * Text
 
 ## Output formats
@@ -26,7 +26,6 @@ The following input formats are implemented:
 The following output formats are implemented:
 
 * ALTO (2.1 and [3.0 with tags](http://altoxml.github.io/documentation/use-cases/tags/ALTO_tags_usecases.html#named_entity_tagging))
-* ALTO-with-Alternatives (aka. inline ALTO)
 * BIO
 * CSV
 * HTML
@@ -43,12 +42,6 @@ Install Maven, Java (v1.7 and up). Clone the source from GitHub, and in the topl
 This command will generate a JAR and a WAR of the NER located in the `target/` directory.
 To deploy the WAR, just copy it into the Tomcat webapp directory, or use Tomcat
 manager to do it for you.
-
-Or move quickly and run (on \*nix systems):
-
-    git clone https://github.com/KBNLresearch/europeananp-ner.git
-    cd europeananp-ner/
-    ./go.sh
 
 ## Usage command-line-interface
 
@@ -78,8 +71,9 @@ Example invocation for classification of german_alto.xml:
 
     java -Xmx800m -jar NerAnnotator.jar -c mets -f alto -l de -m de=./test-files/german.ser.gz -n 2 ./test-files/german_alto.xml
 
-The given example takes the language model called 'german.ser.gz' and
-applies it to 'german_alto.xml' using 2 threads, and container type METS.
+The given example takes the language model called `german.ser.gz` and
+applies it to `german_alto.xml` using 2 threads, with container type `METS`
+and `ALTO` output encoding.
 
 ## Usage web-interface
 
@@ -89,17 +83,17 @@ Web-interface standalone:
 
 This will try to bind to port 8080, using Jetty.
 
-Once deployed to Tomcat the following applies. The default configuration (as well as test-classifiers)
-reside in `src/main/resources/config.ini`, this file references the available classifiers.
+Once deployed to Tomcat, the following applies. The default configuration (as well as test-classifiers)
+resides in `src/main/resources/config.ini`, this file references the available classifiers.
 
 See the provided sample for some default settings. The landing page of the application
-will show the available options once invoked with the browser. The config.ini and the
+will show the available options once invoked with a browser. The `config.ini` and the
 classifiers will end up in `WEB-INF/classes/`, after deployment.
 
 ### Working with classifiers and binary model generation
 
 To be able to compare your results with a baseline we provide
-some test files located in the ```test-files``` directory.
+some test files located in the `test-files` directory.
 
 To run a back-to-front test try:
 
@@ -151,7 +145,7 @@ To verify the NER software, use the created classifier to process the provided e
 
     cd test-files; java -jar ../target/NerAnnotator-0.0.2-SNAPSHOT-jar-with-dependencies.jar -c alto -d out -f alto -l nl -m nl=./eunews_dutch.crf.gz -n 8 ./dutch_alto.xml
 
-Resulting in a directory called `out` containing ALTO files with inline annotation.
+This should result in a directory called `out` containing ALTO files with inline annotation.
 
 ### General remarks on binary classification model generation
 
@@ -165,7 +159,7 @@ correlation in model size and performance.
 
 The Stanford NER package offers a lot of settings that can influence the
 binary model generation process. These settings can be configured using
-`austen.prop`, For more information on the Stanford settings see
+`austen.prop`. For more information on the Stanford settings, see
 [Stanford NER FAQ](http://nlp.stanford.edu/software/crf-faq.shtml).
 
 Binary classification models generated with this tool are fully compatible with the upstream
